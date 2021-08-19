@@ -15,24 +15,48 @@
   </header>
   <main class="main-container">
     <div class="weather-card">
-      <h1 id="city-forecast"><span id="location">Sydney</span><span id="main"> | Cloudy</span></h1>
-      <p id="description">Description: Broken clouds</p>
-      <p id="temp">Temperature: 22</p>
-      <p id="feels-like">Feels Like: 23</p>
-      <p id="humidity">Humidity: 80%</p>
-      <p id="winds">Wind: 23.4km/hr</p>
-      <p id="sunrise">Sunrise: 06:00AM</p>
-      <p id="sunset">Sunset: 16:00PM</p>
+      <h1 id="city-forecast">
+        <span id="location">Sydney</span>
+        <span id="main"> | Cloudy</span>
+      </h1>
+      <p>
+        Description: 
+        <span id="description">clouds</span>
+      </p>
+      <p>
+        Temperature: 
+        <span id="temp">22</span><span id="unit"></span>
+      </p>
+      <p>
+        Feels Like: <span id="feels-like">23</span><span id="unit"></span>
+      </p>
+      <p>
+        Humidity: <span id="humidity">80%</span> 
+      </p>
+      <p>
+        Wind: 
+        <span id="winds">23.4km/hr</span> </p>
+      <p>
+        Sunrise: <span id="sunrise">06:00AM</span> 
+      </p>
+      <p>
+        Sunset: <span id="sunset">16:00PM</span> 
+      </p>
+
       <form id="form">
-          <input type="text" id="input" placeholder="Type city here" pattern="^[a-zA-Z]*$">
+          <input type="text" id="input" placeholder="type location here" pattern="^[a-zA-Z]*$">
           <input type="image" id="search" src="images/search.png">
+        <div id="error">
+          <span class="error">Please enter a valid location!</span>
+        </div> 
+        <div class="form-control">  
+          <p>°C</p>
           <label class="switch">
             <input id="toggle-conversion" type="checkbox">
             <span class="slider round"></span>
           </label>
-        <div id="error">
-          <span class="error">Please enter a valid location!</span>
-        </div>
+          <p>°F </p>
+        </div> 
       </form>
     </div>
   </main>
