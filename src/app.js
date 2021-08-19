@@ -1,5 +1,7 @@
-const app = (function() {
+import toDate from 'date-fns/toDate';
+import format from 'date-fns/format';
 
+const app = (function() {
 const form = document.querySelector("#form");
 const input = document.querySelector("#input");
 const location = document.querySelector("#location");
@@ -13,6 +15,7 @@ const sunrise = document.querySelector("#sunrise");
 const sunset = document.querySelector("#sunset");
 const toggleConversion = document.querySelector("#toggle-conversion");
 const error = document.querySelector(".error");
+const unit = document.querySelectorAll("#unit");
 
 form.addEventListener("submit", (e) => {
   const location = input.value; 
@@ -25,8 +28,29 @@ form.addEventListener("submit", (e) => {
 
 toggleConversion.addEventListener("click", (e) => {
   console.log(toggleConversion.checked)
-  if(toggleConversion) {
+  if(toggleConversion.checked) {
+    const farenheitUnit = "°F"
+    const currentTempValue = temp.innerText;
+    temp.innerText = `${celsiustoFarenheit(currentTempValue)}`
 
+    const currentFeelsLikeValue = feelsLike.innerText;
+    feelsLike.innerText = `${celsiustoFarenheit(currentFeelsLikeValue)}`
+
+    unit.forEach((unit) => {
+      unit.innerText = farenheitUnit
+    })
+  }
+  if(!toggleConversion.checked) {
+    const celsiusUnit = "°C"
+    const currentTempValue = temp.innerText;
+    temp.innerText = `${farenheitToCelsius(currentTempValue)}`
+    
+    const currentFeelsLikeValue = feelsLike.innerText;
+    feelsLike.innerText = `${farenheitToCelsius(currentFeelsLikeValue)}`
+
+    unit.forEach((unit) => {
+      unit.innerText = celsiusUnit;
+    })
   }
 })
 
@@ -42,6 +66,7 @@ const grabData = async function(city) {
     try {
       const response = await fetch(url, {mode: "cors"});
       const data = await response.json();
+      console.log(data)
       const info = filterData(data);
       updateFields(info);
       // return console.log(
@@ -68,9 +93,10 @@ const grabData = async function(city) {
     const description = data.weather[0].description;
     const temp = kelvinToCelsius(data.main.temp, toggleConversionValue);
     const feelsLike = kelvinToCelsius(data.main.feels_like, toggleConversionValue);
+    const humidity = data.main.humidity;
     const windSpeed = data.wind.speed;
-    const sunrise = data.sys.sunrise;
-    const sunset = data.sys.sunset;
+    const sunrise = format(new Date(toDate(data.sys.sunrise)), 'h:mmaaa');
+    const sunset = format(new Date(toDate(data.sys.sunset)), 'h:mmaaa');
 
     const info = { 
       location,
@@ -78,55 +104,51 @@ const grabData = async function(city) {
       description,
       temp,
       feelsLike,
+      humidity,
       windSpeed,
       sunrise,
       sunset
     };
-
+    console.log(info)
     return info;
   }
 
-  const kelvinToCelsius = function(val, checked) {
-    if(checked === false) return Number(val - 273.15).toFixed(2);
-    if(checked === true) return Number(((val - 273.15) * 1.8) + 32);
-  }
-
   const updateFields = function(data) {
+    console.log(data.feelsLike);
     location.innerText = data.location;
     main.innerText = ` | ${data.main}`;
     description.innerText = `Description: ${data.description}`;
-    temp.innerText = `${data.temp} `;
-    feelsLike.innerText = data.feelsLike;
-    winds.innerText = data.windSpeed;
-    sunrise.innerText = data.sunrise;
-    sunset.innerText = data.sunset;
+    temp.innerText = `Temperature: ${data.temp} `;
+    feelsLike.innerText = `Feels like: ${data.feelsLike}`;
+    humidity.innerText = `Humidity: ${data.humidity}%`
+    winds.innerText = `Wind speed: ${data.windSpeed}m/s`;
+    sunrise.innerText = `Sunrise: ${data.sunrise}`;
+    sunset.innerText = `Sunset: ${data.sunset}`;
   }
 
-  // °C
+  const kelvinToCelsius = function(val, checked) {
+    const farenheit = "°F";
+    const celsius = "°C";
+    if(checked === false) return Number(val - 273.15).toFixed(2);
+    if(checked === true) return Number(((val - 273.15) * 1.8) + 32).toFixed(2);
+  } 
 
-  const conversion = function() {
-   if(true) {
-
-   }
-   if(false) {
-
-   }
+  const celsiustoFarenheit = function(val) {
+    return Number((val * 1.8) + 32).toFixed(2);
   }
 
-
-
-  const celsiusToFarenheit = function(val) {
-    switch (val) {
-      case true:
-        break;
-      
-      case false:
-        break;
-    }
+  const farenheitToCelsius = function(val) {
+    return Number((val - 32) / 1.8).toFixed(2);
   }
+
+  
   
   return { grabData, toggleError }
 })()
+
+// let date = toDate(1629348759)
+// console.log(date)
+// console.log(format(new Date(date), 'h:mmaaa'))
 
 
 
