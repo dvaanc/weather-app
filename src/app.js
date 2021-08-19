@@ -9,13 +9,17 @@ const main = document.querySelector("#main");
 const description = document.querySelector("#description");
 const temp = document.querySelector("#temp");
 const feelsLike = document.querySelector("#feels-like");
-const humidity = document.querySelector("#feels-like");
+const humidity = document.querySelector("#humidity");
 const winds = document.querySelector("#winds");
 const sunrise = document.querySelector("#sunrise");
 const sunset = document.querySelector("#sunset");
 const toggleConversion = document.querySelector("#toggle-conversion");
 const error = document.querySelector(".error");
 const unit = document.querySelectorAll("#unit");
+
+
+let toggleConversionValue = false;
+let units = "";
 
 form.addEventListener("submit", (e) => {
   const location = input.value; 
@@ -27,13 +31,14 @@ form.addEventListener("submit", (e) => {
 })
 
 toggleConversion.addEventListener("click", (e) => {
-  console.log(toggleConversion.checked)
+  if(temp.innerText === "") return;
   if(toggleConversion.checked) {
-    const farenheitUnit = "°F"
-    const currentTempValue = temp.innerText;
-    temp.innerText = `${celsiustoFarenheit(currentTempValue)}`
+    toggleConversionValue = true;
+    isToggleConversionChecked();
+    const currentTempValue = Number(temp.innerText);
+    const currentFeelsLikeValue = Number(feelsLike.innerText);
 
-    const currentFeelsLikeValue = feelsLike.innerText;
+    temp.innerText = `${celsiustoFarenheit(currentTempValue)}`
     feelsLike.innerText = `${celsiustoFarenheit(currentFeelsLikeValue)}`
 
     unit.forEach((unit) => {
@@ -41,11 +46,11 @@ toggleConversion.addEventListener("click", (e) => {
     })
   }
   if(!toggleConversion.checked) {
-    const celsiusUnit = "°C"
-    const currentTempValue = temp.innerText;
+    toggleConversionValue = false;
+    isToggleConversionChecked();
+    const currentTempValue = Number(temp.innerText);
+    const currentFeelsLikeValue = Number(feelsLike.innerText);
     temp.innerText = `${farenheitToCelsius(currentTempValue)}`
-    
-    const currentFeelsLikeValue = feelsLike.innerText;
     feelsLike.innerText = `${farenheitToCelsius(currentFeelsLikeValue)}`
 
     unit.forEach((unit) => {
@@ -85,8 +90,6 @@ const grabData = async function(city) {
     }
   } 
 
-  let toggleConversionValue = false;
-  let units = "";
   const filterData = function(data) {
     const location = data.name;
     const main = data.weather[0].main;
@@ -114,13 +117,14 @@ const grabData = async function(city) {
   }
 
   const updateFields = function(data) {
-    console.log(data.feelsLike);
+    isToggleConversionChecked();
     location.innerText = data.location;
     main.innerText = ` | ${data.main}`;
-    description.innerText = `Description: ${data.description}`;
-    temp.innerText = `Temperature: ${data.temp} `;
+    description.innerText = `Description: ${capitalise(data.description)}`;
+    temp.innerText = `Temperature: ${data.temp}`;
     feelsLike.innerText = `Feels like: ${data.feelsLike}`;
-    humidity.innerText = `Humidity: ${data.humidity}%`
+    unit.forEach(unit => unit.innerText = `${units}`);
+    humidity.innerText = `Humidity: ${data.humidity}%`;
     winds.innerText = `Wind speed: ${data.windSpeed}m/s`;
     sunrise.innerText = `Sunrise: ${data.sunrise}`;
     sunset.innerText = `Sunset: ${data.sunset}`;
@@ -141,14 +145,25 @@ const grabData = async function(city) {
     return Number((val - 32) / 1.8).toFixed(2);
   }
 
+  const isToggleConversionChecked = function() {
+    if(toggleConversionValue) return units = "°F";
+    if(!toggleConversionValue) return units = "°C";
+  }
+
+  const capitalise = function(words) {
+    return words
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.substr(1))
+      .join(' ')
+  }
+
   
   
   return { grabData, toggleError }
 })()
 
-// let date = toDate(1629348759)
-// console.log(date)
-// console.log(format(new Date(date), 'h:mmaaa'))
+
 
 
 
