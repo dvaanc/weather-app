@@ -11,15 +11,23 @@ const humidity = document.querySelector("#feels-like");
 const winds = document.querySelector("#winds");
 const sunrise = document.querySelector("#sunrise");
 const sunset = document.querySelector("#sunset");
-const toggleConversion = document.querySelector("#toggle-conersion");
+const toggleConversion = document.querySelector("#toggle-conversion");
 const error = document.querySelector(".error");
 
 form.addEventListener("submit", (e) => {
   const location = input.value; 
+  const conversion = toggleConversion.checked;
+  toggleConversionValue = conversion;
   grabData(location)
-
   form.reset()
   e.preventDefault();
+})
+
+toggleConversion.addEventListener("click", (e) => {
+  console.log(toggleConversion.checked)
+  if(toggleConversion) {
+
+  }
 })
 
 const toggleError = function() {
@@ -35,7 +43,6 @@ const grabData = async function(city) {
       const response = await fetch(url, {mode: "cors"});
       const data = await response.json();
       const info = filterData(data);
-      console.log(info)
       updateFields(info);
       // return console.log(
       //   data.name,
@@ -51,16 +58,16 @@ const grabData = async function(city) {
       console.log(err)
       toggleError();
     }
-  
   } 
-  // grabData().then(data => filterData(data))
-  
+
+  let toggleConversionValue = false;
+  let units = "";
   const filterData = function(data) {
     const location = data.name;
     const main = data.weather[0].main;
     const description = data.weather[0].description;
-    const temp = data.main.temp;
-    const feelsLike = data.main.feels_like;
+    const temp = kelvinToCelsius(data.main.temp, toggleConversionValue);
+    const feelsLike = kelvinToCelsius(data.main.feels_like, toggleConversionValue);
     const windSpeed = data.wind.speed;
     const sunrise = data.sys.sunrise;
     const sunset = data.sys.sunset;
@@ -79,11 +86,16 @@ const grabData = async function(city) {
     return info;
   }
 
+  const kelvinToCelsius = function(val, checked) {
+    if(checked === false) return Number(val - 273.15).toFixed(2);
+    if(checked === true) return Number(((val - 273.15) * 1.8) + 32);
+  }
+
   const updateFields = function(data) {
     location.innerText = data.location;
     main.innerText = ` | ${data.main}`;
     description.innerText = `Description: ${data.description}`;
-    temp.innerText = `${kelvinToCelsius(data.temp)} `;
+    temp.innerText = `${data.temp} `;
     feelsLike.innerText = data.feelsLike;
     winds.innerText = data.windSpeed;
     sunrise.innerText = data.sunrise;
@@ -91,23 +103,32 @@ const grabData = async function(city) {
   }
 
   // °C
-  const conversion = function(checked) {
-   if(checked) {
+
+  const conversion = function() {
+   if(true) {
 
    }
-   if(!checked) {
+   if(false) {
 
    }
   }
 
-  const kelvinToCelsius = function(val) {
-    return Number(val - 273.15).toFixed(2);
+
+
+  const celsiusToFarenheit = function(val) {
+    switch (val) {
+      case true:
+        break;
+      
+      case false:
+        break;
+    }
   }
   
   return { grabData, toggleError }
 })()
 
-app.grabData('London')
+
 
 
 
