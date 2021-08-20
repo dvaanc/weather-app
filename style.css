@@ -55,9 +55,19 @@ header {
   margin-bottom: 15px;
 }
 
+.info-group {
+  display: none;
+  flex-direction: column;
+}
+
 .weather-card p {
   font-size: 30px;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+
+}
+
+.show-info {
+  display: flex;
 }
 
 #form {
@@ -187,4 +197,40 @@ footer {
   background-color: #403E39;
   color: #fff;
   font-family: var(--body-font);
+}
+
+.loading-container {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+}
+
+#loading {
+  width: 8rem;
+  height: 8rem;
+  border: 5px solid #f3f3f3;
+  border-top: 6px solid #414df2;
+  border-radius: 100%;
+  margin: auto;
+  animation: spin 1s infinite linear;
+}
+
+.display {
+  display: flex;
+}
+
+@keyframes spin {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
 }
