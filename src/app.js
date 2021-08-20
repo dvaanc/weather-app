@@ -65,6 +65,7 @@ toggleConversion.addEventListener("click", (e) => {
 })
 
 const toggleError = function() {
+  loading.classList.remove("display");
   error.classList.add("show");
   setTimeout(function() {
     error.classList.remove("show");
@@ -79,7 +80,6 @@ const grabData = async function(city) {
       const info = filterData(data);
       updateFields(info);
     } catch (err) {
-      loading.classList.remove("display");
       console.log(err)
       toggleError();
     }
