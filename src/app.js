@@ -79,6 +79,7 @@ const grabData = async function(city) {
       const info = filterData(data);
       updateFields(info);
     } catch (err) {
+      loading.classList.remove("display");
       console.log(err)
       toggleError();
     }
