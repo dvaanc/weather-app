@@ -3,7 +3,7 @@ Description:
 - Project is a weather app that fetches data through api.
 
 Preview:
-point_right https://dvaanc.github.io/weather-app/
+https://github.githubassets.com/images/icons/emoji/unicode/1f449.png https://dvaanc.github.io/weather-app/
 
 Features to be added:
 - Sunrise + Sunset timezone fix
