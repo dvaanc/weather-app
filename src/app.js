@@ -68,7 +68,7 @@ const toggleError = function() {
   error.classList.add("show");
   setTimeout(function() {
     error.classList.remove("show");
-  }, 5000);
+  }, 3000);
 }
 
 const grabData = async function(city) {
