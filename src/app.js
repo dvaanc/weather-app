@@ -4,6 +4,8 @@ import format from 'date-fns/format';
 const app = (function() {
 const form = document.querySelector("#form");
 const input = document.querySelector("#input");
+const loading = document.querySelector(".loading-container");
+const infoGroup = document.querySelector(".info-group");
 const location = document.querySelector("#location");
 const main = document.querySelector("#main");
 const description = document.querySelector("#description");
@@ -22,11 +24,12 @@ let toggleConversionValue = false;
 let units = "";
 
 form.addEventListener("submit", (e) => {
+  loading.classList.add("display")
   const location = input.value; 
   const conversion = toggleConversion.checked;
   toggleConversionValue = conversion;
-  grabData(location)
-  form.reset()
+  grabData(location);
+  form.reset();
   e.preventDefault();
 })
 
@@ -35,6 +38,7 @@ toggleConversion.addEventListener("click", (e) => {
   if(toggleConversion.checked) {
     toggleConversionValue = true;
     isToggleConversionChecked();
+    console.log(temp.innerText)
     const currentTempValue = Number(temp.innerText);
     const currentFeelsLikeValue = Number(feelsLike.innerText);
 
@@ -42,19 +46,20 @@ toggleConversion.addEventListener("click", (e) => {
     feelsLike.innerText = `${celsiustoFarenheit(currentFeelsLikeValue)}`
 
     unit.forEach((unit) => {
-      unit.innerText = farenheitUnit
+      unit.innerText = units;
     })
   }
   if(!toggleConversion.checked) {
     toggleConversionValue = false;
     isToggleConversionChecked();
+    console.log(temp.innerText)
     const currentTempValue = Number(temp.innerText);
     const currentFeelsLikeValue = Number(feelsLike.innerText);
     temp.innerText = `${farenheitToCelsius(currentTempValue)}`
     feelsLike.innerText = `${farenheitToCelsius(currentFeelsLikeValue)}`
 
     unit.forEach((unit) => {
-      unit.innerText = celsiusUnit;
+      unit.innerText = units;
     })
   }
 })
@@ -71,19 +76,8 @@ const grabData = async function(city) {
     try {
       const response = await fetch(url, {mode: "cors"});
       const data = await response.json();
-      console.log(data)
       const info = filterData(data);
       updateFields(info);
-      // return console.log(
-      //   data.name,
-      //   data.weather[0].main,
-      //   data.weather[0].description, 
-      //   data.main.temp,
-      //   data.main.feels_like,
-      //   data.wind.speed,
-      //   data.sys.sunrise,
-      //   data.sys.sunset
-      //   );
     } catch (err) {
       console.log(err)
       toggleError();
@@ -112,22 +106,28 @@ const grabData = async function(city) {
       sunrise,
       sunset
     };
-    console.log(info)
     return info;
   }
 
   const updateFields = function(data) {
+
     isToggleConversionChecked();
     location.innerText = data.location;
     main.innerText = ` | ${data.main}`;
-    description.innerText = `Description: ${capitalise(data.description)}`;
-    temp.innerText = `Temperature: ${data.temp}`;
-    feelsLike.innerText = `Feels like: ${data.feelsLike}`;
+    description.innerText = `${capitalise(data.description)}`;
+    temp.innerText = `${data.temp}`;
+    feelsLike.innerText = `${data.feelsLike}`;
+    humidity.innerText = `${data.humidity}%`;
+    winds.innerText = `${data.windSpeed}m/s`;
+    // sunrise.innerText = `${data.sunrise}`;
+    // sunset.innerText = `${data.sunset}`;
     unit.forEach(unit => unit.innerText = `${units}`);
-    humidity.innerText = `Humidity: ${data.humidity}%`;
-    winds.innerText = `Wind speed: ${data.windSpeed}m/s`;
-    sunrise.innerText = `Sunrise: ${data.sunrise}`;
-    sunset.innerText = `Sunset: ${data.sunset}`;
+    setTimeout (() => {
+      loading.classList.remove("display")
+      infoGroup.classList.add("show-info");
+    }, 700)
+
+
   }
 
   const kelvinToCelsius = function(val, checked) {
@@ -158,8 +158,6 @@ const grabData = async function(city) {
       .join(' ')
   }
 
-  
-  
   return { grabData, toggleError }
 })()
 

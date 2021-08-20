@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <title>Document</title>
+  <title>Weather</title>
 </head>
 <body>
   <header>
@@ -15,19 +15,21 @@
   </header>
   <main class="main-container">
     <div class="weather-card">
-      <h1 id="city-forecast">
-        <span id="location"></span>
-        <span id="main"></span>
-      </h1>
-      <p><span id="description"></span></p>
-      <p><span id="temp"></span><span id="unit"></span></p>
-      <p><span id="feels-like"></span><span id="unit"></span></p>
-      <p><span id="humidity"></span></p>
-      <p><span id="winds"></span></p>
-      <p><span id="sunrise"></span> </p>
-      <p><span id="sunset"></span></p>
+      <div class="info-group">
+        <h1 id="city-forecast">
+          <span id="location"></span>
+          <span id="main"></span>
+        </h1>
+        <p class="info">Description: <span id="description"></span></p>
+        <p class="info">Temperature: <span id="temp"></span><span id="unit"></span></p>
+        <p class="info">Feels like: <span id="feels-like"></span><span id="unit"></span></p>
+        <p class="info">Humidity: <span id="humidity"></span></p>
+        <p class="info">Wind speed: <span id="winds"></span></p>
+        <!-- <p class="info">Sunrise: <span id="sunrise"></span> </p>
+        <p class="info">Sunset: <span id="sunset"></span></p> -->
+      </div>
       <form id="form">
-          <input type="text" id="input" placeholder="type location here" pattern="^[a-zA-Z]*$">
+          <input type="text" id="input" placeholder="type location here" pattern="^[a-zA-Z ]*$">
           <input type="image" id="search" src="images/search.png">
         <div id="error">
           <span class="error">Please enter a valid location!</span>
@@ -43,6 +45,9 @@
       </form>
     </div>
   </main>
+  <div class="loading-container">
+    <div id="loading"></div>
+  </div>
   <footer>
     <p>Copyright © 2021. Web Design by dvaanc.</p>
   </footer>
